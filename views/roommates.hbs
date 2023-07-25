@@ -1,0 +1,14 @@
+<!-- views/partials/roommates.hbs -->
+<ul id="roommates-list" class="list-group mt-3">
+  {{#each roommates}}
+    <li class="list-group-item">
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0">{{name}}</h5>
+          <p>Edad: {{age}}</p>
+          <p>Teléfono: {{phone}}</p>
+        </div>
+      </div>
+    </li>
+  {{/each}}
+</ul>

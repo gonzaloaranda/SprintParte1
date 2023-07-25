@@ -1,0 +1,69 @@
+<!-- views/index.hbs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro de Gastos entre Roommates</title>
+  <!-- Agregar el enlace a Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Roommates</h1>
+    <button id="add-roommate-btn" class="btn btn-primary mt-3" style="font-size: 12px;">Agregar Roommate</button>
+    <div id="roommates-container" style="font-size: 12px;">
+      <!-- Aquí se mostrará la lista de roommates -->
+      {{#if roommates}}
+        <ul class="list-group mt-3">
+          {{#each roommates}}
+            <li class="list-group-item">{{name}}</li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p>No hay roommates registrados.</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <script>
+    const roommatesContainer = document.getElementById('roommates-container');
+    const addRoommateBtn = document.getElementById('add-roommate-btn');
+
+    // Función para mostrar la lista de roommates
+    function showRoommates(roommates) {
+      roommatesContainer.innerHTML = '';
+
+      roommates.forEach((roommate) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.style.fontSize = '12px'; // Establecer el tamaño de fuente a 12px
+        listItem.textContent = roommate.name;
+        roommatesContainer.appendChild(listItem);
+      });
+    }
+
+    // Agregar un nuevo roommate al hacer clic en el botón
+    addRoommateBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/roommate', { method: 'POST' });
+        if (response.ok) {
+          const newRoommate = await response.json();
+          showRoommates([...roommates, newRoommate]); // Agregar el nuevo roommate a la lista existente
+        } else {
+          console.error('Error al agregar roommate');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // Mostrar los roommates al cargar la página
+    const roommates = {{{roommatesJSON}}};
+    showRoommates(roommates);
+  </script>
+
+  <!-- Agregar los scripts de Bootstrap y jQuery al final del cuerpo para una carga más rápida -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
